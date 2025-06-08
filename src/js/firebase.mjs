@@ -30,7 +30,7 @@ function fb_initialise() {
   console.log("Database loaded!");
 }
 
-function fb_authenticate() {
+function fb_authenticate(then) {
   const AUTH = getAuth();
   const PROVIDER = new GoogleAuthProvider();
 
@@ -44,8 +44,7 @@ function fb_authenticate() {
     .then((result) => {
       console.info("authentication success, result: " + result);
 
-      console.info(result.user);
-      window.location.href = "./home.html";
+      then();
     })
 
     .catch((error) => {

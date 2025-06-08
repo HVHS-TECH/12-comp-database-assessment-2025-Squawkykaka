@@ -31,7 +31,10 @@
 
         </form>
         <div style="width: 50%;margin: auto;">
-            <button class="button-9" role="button" onclick="fb_authenticate()">Login With Google</button>
+            <button class="button-9" role="button" onclick="fb_authenticate(() => {
+                console.info(result.user);
+                window.location.href = './home.html';
+            })">Login With Google</button>
         </div>
     </div>
 </body>
