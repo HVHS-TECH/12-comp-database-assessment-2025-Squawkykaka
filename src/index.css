@@ -5,5 +5,5 @@ button {
 }
 
 .login-section {
-  @apply bg-orange-400 p-10 rounded-2xl border-2 shadow-lg w-80 h-96 flex flex-col justify-between
+  @apply bg-orange-400 p-10 rounded-2xl border-2 shadow-lg w-80 flex flex-col justify-between
 }

@@ -43,7 +43,12 @@ function SignupSection() {
           Sign up with Google
         </button>
       </form>
+
+      <div className="flex-grow flex items-center justify-center">
+        <p className="text-red-800 italic pt-5" id="loginStatusMessage"></p>
+      </div>
     </div>
+
   )
 }
 

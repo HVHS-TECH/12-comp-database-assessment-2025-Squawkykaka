@@ -1,5 +1,5 @@
-import { fb_initialise } from "./firebase.mts";
-import { setupSignUpListener } from "./login-manager.mts";
+import { fb_initialise } from "./firebase";
+import { setupSignUpListener } from "./login-manager";
 
 
 document.addEventListener("DOMContentLoaded", () => {

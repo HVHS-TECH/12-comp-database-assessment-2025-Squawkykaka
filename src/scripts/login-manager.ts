@@ -1,5 +1,5 @@
 import { get, ref, set } from "firebase/database";
-import { fb_authenticate, FB_GAMEDB } from "./firebase.mjs";
+import { fb_authenticate, FB_GAMEDB } from "./firebase";
 import { getAuth, type User } from "firebase/auth";
 
 // Steps i need to do
@@ -11,7 +11,7 @@ import { getAuth, type User } from "firebase/auth";
 
 // If logging in, check if the user has setup an account, and if they havnt send an error.
 
-function setupSignUpListener() {
+export function setupSignUpListener() {
   const form = document.getElementById("loginForm") as HTMLFormElement;
 
   form.addEventListener("submit", (event) => {
@@ -25,8 +25,6 @@ function setupSignUpListener() {
       }
     });
 
-    console.log(formData);
-
     authenticateUser(formData);
   });
 }
@@ -34,11 +32,12 @@ function setupSignUpListener() {
 
 async function authenticateUser(formData: Record<string, string>) {
   try {
-    const auth_result = await fb_authenticate();
-    console.log(auth_result);
+    console.log("Authenticating");
 
+    const auth_result = await fb_authenticate();
     verifyUsername(formData);
 
+    // TODO save this and check so we dont have to reauth.
     document.cookie = `auth=${auth_result}`;
   } catch (error) {
     console.log("Login failed: " + error);
@@ -46,26 +45,31 @@ async function authenticateUser(formData: Record<string, string>) {
 }
 
 async function verifyUsername(formData: Record<string, string>) {
-  // Get public users
-  const public_data = await get(ref(FB_GAMEDB, `/panel/public/`));
-  const snapshot = public_data.val();
-  console.log(snapshot);
+  console.log("Verifying User");
 
-  // Get auth
+  // Get public data
+  const public_data = await get(ref(FB_GAMEDB, `/panel/public/`));
+  const snapshot: object = public_data.val();
+
+  // Get current user
   const user = getCurrentUser()
 
   // Checks if the user has made an account.
-  var made_account = snapshot.hasOwnProperty(user.uid);
+  const made_account = !Object.prototype.hasOwnProperty.call(snapshot, user.uid);
 
   if (made_account) {
     createUserAccount(formData);
   } else {
     // showAccountExistError();
+    console.log("That account already exists")
+    // TODO make this show an error saying that accotunt already exists.
   }
 }
 
 // Now set the users data in firebase.
 function createUserAccount(formData: Record<string, string>) {
+  console.log("Creating User Account");
+
   let user: User;
 
   try {
@@ -92,14 +96,15 @@ function createUserAccount(formData: Record<string, string>) {
     private_data: Record<string, string>
   ) {
     try {
-      await set(ref(FB_GAMEDB, `/panel/public/${uid}`), public_data);
-      await set(ref(FB_GAMEDB, `/panel/users/${uid}`), private_data);
+      set(ref(FB_GAMEDB, `/panel/public/${uid}`), public_data);
+      set(ref(FB_GAMEDB, `/panel/users/${uid}`), private_data);
     } catch (error) {
       console.error(error);
     }
   }
 
   setdata(public_data, private_data);
+  window.location.href = "home.html"
 }
 
 
@@ -113,5 +118,3 @@ function getCurrentUser(): User {
 
   return user;
 }
-
-export { setupSignUpListener };
