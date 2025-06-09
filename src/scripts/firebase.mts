@@ -1,13 +1,9 @@
-import {
-  getAuth,
-  GoogleAuthProvider,
-  signInWithPopup,
-} from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-import { getDatabase } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js";
+import { initializeApp, type FirebaseApp } from "firebase/app";
+import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { Database, getDatabase } from "firebase/database";
 
 // Variables
-export let FB_GAMEAPP, FB_GAMEDB;
+export let FB_GAMEAPP: FirebaseApp, FB_GAMEDB: Database;
 
 // Config and api keys
 const FB_GAMECONFIG = {
@@ -23,14 +19,14 @@ const FB_GAMECONFIG = {
 };
 
 // helper functions
-function fb_initialise() {
+export function fb_initialise() {
   FB_GAMEAPP = initializeApp(FB_GAMECONFIG);
   FB_GAMEDB = getDatabase(FB_GAMEAPP);
 
   console.log("Database loaded!");
 }
 
-function fb_authenticate() {
+export async function fb_authenticate() {
   const AUTH = getAuth();
   const PROVIDER = new GoogleAuthProvider();
 
@@ -40,18 +36,13 @@ function fb_authenticate() {
     prompt: "select_account",
   });
 
-  return signInWithPopup(AUTH, PROVIDER)
-    .then((result) => {
-      console.info("authentication success, result: " + result);
+  try {
+    const result = await signInWithPopup(AUTH, PROVIDER);
+    console.info("authentication success, result: " + result);
+    return result;
+  } catch (error) {
+    console.info("authentication fail, error: " + error);
 
-      return result;
-    })
-
-    .catch((error) => {
-      console.info("authentication fail, error: " + error);
-
-      throw error;
-    });
+    throw error;
+  }
 }
-
-export { fb_authenticate, fb_initialise };
