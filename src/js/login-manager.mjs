@@ -12,7 +12,7 @@ import { redirectToHome } from "./utils.mjs";
 // First get user's prefered usename and gender maybe ✅
 // Then when the sign up with google button is pr`e`ssed, check if the user filled up the form
 // and if the username has not been taken✅
-// then save the name + email,
+// then save the name + email,✅
 // username and gender to the database, then redirect.
 
 // If logging in, check if the user has setup an account, and if they havnt send an error.
@@ -21,52 +21,51 @@ function setupSignUpListener() {
   const form = document.getElementById("signup-form");
 
   form.addEventListener("submit", (event) => {
+    // Make it so the firn has to be loogged in.
     event.preventDefault();
 
     const formData = {};
 
+    // Go over the form and save the data to an object
     new FormData(form).forEach((value, key) => {
       formData[key] = value.toLowerCase();
     });
 
-    console.log(formData);
-
-    fb_authenticate(() => {
-      verifyUsername(formData);
-    });
+    authenticateUser(formData);
   });
 }
 
-function verifyUsername(formData) {
-  get(ref(FB_GAMEDB, `/panel/public/`)).then((snapshot) => {
-    var public_data = snapshot.val();
+async function authenticateUser(formData) {
+  try {
+    const auth_result = await fb_authenticate();
+    verifyUsername(formData, auth_result);
 
-    var username_valid = true;
+    document.cookie = `auth=${auth_result}`;
+  } catch (error) {
+    console.log("Login failed: " + error);
+  }
+}
 
-    console.log(public_data);
+async function verifyUsername(formData, auth_result) {
+  // Get public users
+  const public_data = await get(ref(FB_GAMEDB, `/panel/public/`));
+  const snapshot = public_data.val();
+  console.log(snapshot);
 
-    for (const user in public_data) {
-      if (public_data[user].username === formData.username) {
-        showUsernameError();
-        username_valid = false;
-        break;
-      }
-    }
+  // Checks if the user has made an account.
+  var made_account = snapshot.hasOwnProperty(auth_result.uid);
 
-    if (!username_valid) return;
-
+  if (made_account) {
     createUserAccount(formData);
-  });
+  } else {
+    showAccountExistError();
+  }
 }
 
 // Now set the users data in firebase.
-function createUserAccount(formData) {
+function createUserAccount(formData, auth_result) {
   // get the current users uid
-  const auth = getAuth();
-  const user = auth.currentUser;
-  const uid = user.uid;
-
-  console.log(user);
+  const uid = auth_result.uid;
 
   // Create a new object containing public data
   // This would only be username for first login.

@@ -30,7 +30,7 @@ function fb_initialise() {
   console.log("Database loaded!");
 }
 
-function fb_authenticate(then) {
+function fb_authenticate() {
   const AUTH = getAuth();
   const PROVIDER = new GoogleAuthProvider();
 
@@ -40,15 +40,17 @@ function fb_authenticate(then) {
     prompt: "select_account",
   });
 
-  signInWithPopup(AUTH, PROVIDER)
+  return signInWithPopup(AUTH, PROVIDER)
     .then((result) => {
       console.info("authentication success, result: " + result);
 
-      then();
+      return result;
     })
 
     .catch((error) => {
       console.info("authentication fail, error: " + error);
+
+      throw error;
     });
 }
 
