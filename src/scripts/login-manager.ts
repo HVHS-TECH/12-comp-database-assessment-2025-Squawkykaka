@@ -1,6 +1,9 @@
-import { get, ref, set } from "firebase/database";
+// This lazy loads the firebase api's
+const { get, ref, set } = await import("firebase/database");
+const { getAuth } = await import("firebase/auth");
+
 import { fb_authenticate, FB_GAMEDB } from "./firebase";
-import { getAuth, type User } from "firebase/auth";
+import { type User } from "firebase/auth";
 
 // Steps i need to do
 // First get user's prefered usename and gender maybe ✅
@@ -29,7 +32,6 @@ export function setupSignUpListener() {
   });
 }
 
-
 async function authenticateUser(formData: Record<string, string>) {
   try {
     console.log("Authenticating");
@@ -52,16 +54,19 @@ async function verifyUsername(formData: Record<string, string>) {
   const snapshot: object = public_data.val();
 
   // Get current user
-  const user = getCurrentUser()
+  const user = getCurrentUser();
 
   // Checks if the user has made an account.
-  const made_account = !Object.prototype.hasOwnProperty.call(snapshot, user.uid);
+  const made_account = !Object.prototype.hasOwnProperty.call(
+    snapshot,
+    user.uid
+  );
 
   if (made_account) {
     createUserAccount(formData);
   } else {
     // showAccountExistError();
-    console.log("That account already exists")
+    console.log("That account already exists");
     // TODO make this show an error saying that accotunt already exists.
   }
 }
@@ -104,9 +109,15 @@ function createUserAccount(formData: Record<string, string>) {
   }
 
   setdata(public_data, private_data);
-  window.location.href = "home.html"
+  writeStatusMessage("Thank you for making an account, you may login!");
 }
 
+function writeStatusMessage(message: string) {
+  const loginStatusMessage = document.getElementById("loginStatusMessage");
+  if (loginStatusMessage) {
+    loginStatusMessage.innerHTML = message;
+  }
+}
 
 function getCurrentUser(): User {
   const auth = getAuth();

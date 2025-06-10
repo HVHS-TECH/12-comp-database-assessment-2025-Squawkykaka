@@ -14,7 +14,7 @@ function LoginPanel() {
 
 function SignupSection() {
   return (
-    <div className="login-section">
+    <div className="bg-orange-400 p-10 rounded-2xl border-2 shadow-lg w-80 flex flex-col justify-between">
       <form id="loginForm" className="flex flex-col gap-4">
         <h2 className="text-3xl font-semibold mb-4">Sign Up</h2>
 
@@ -39,7 +39,7 @@ function SignupSection() {
           <option value="prefer-not">Prefer not to say</option>
         </select>
 
-        <button type="submit">
+        <button type="submit" className="p-2 bg-blue-600 text-white border-4 border-blue-800 rounded-2xl hover:bg-blue-700 transition">
           Sign up with Google
         </button>
       </form>
@@ -54,11 +54,11 @@ function SignupSection() {
 
 function LoginSection() {
   return (
-    <div className="login-section">
+    <div className="bg-orange-400 p-10 rounded-2xl border-2 shadow-lg w-80 flex flex-col justify-between">
       <h2 className="text-3xl font-semibold">Login</h2>
 
       <div className="flex-grow flex items-center justify-center">
-        <button>
+        <button className="p-2 bg-blue-600 text-white border-4 border-blue-800 rounded-2xl hover:bg-blue-700 transition">
           Login with Google
         </button>
       </div>

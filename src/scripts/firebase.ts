@@ -1,5 +1,7 @@
 import { initializeApp, type FirebaseApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+const { getAuth, GoogleAuthProvider, signInWithPopup } = await import(
+  "firebase/auth"
+);
 import { Database, getDatabase } from "firebase/database";
 
 // Variables
