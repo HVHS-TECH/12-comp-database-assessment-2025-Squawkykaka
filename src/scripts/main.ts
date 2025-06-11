@@ -1,8 +1,9 @@
-import { fb_initialise } from "./firebase";
-import { setupSignUpListener } from "./login-manager";
-
+import { fb_initialise } from "./firebase.ts";
+import { setupLoginListener } from "./login/login.ts";
+import { setupSignUpListener } from "./login/signup.ts";
 
 document.addEventListener("DOMContentLoaded", () => {
-    setupSignUpListener()
-    fb_initialise()
+  setupSignUpListener();
+  setupLoginListener();
+  fb_initialise();
 });

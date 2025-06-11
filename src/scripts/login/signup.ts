@@ -2,8 +2,9 @@
 const { get, ref, set } = await import("firebase/database");
 const { getAuth } = await import("firebase/auth");
 
-import { fb_authenticate, FB_GAMEDB } from "./firebase";
+import { fb_authenticate, FB_GAMEDB } from "../firebase";
 import { type User } from "firebase/auth";
+import { writeStatusMessage } from "../util";
 
 // Steps i need to do
 // First get user's prefered usename and gender maybe ✅
@@ -16,6 +17,10 @@ import { type User } from "firebase/auth";
 
 export function setupSignUpListener() {
   const form = document.getElementById("loginForm") as HTMLFormElement;
+
+  if (form === null) {
+    return;
+  }
 
   form.addEventListener("submit", (event) => {
     event.preventDefault();
@@ -110,13 +115,6 @@ function createUserAccount(formData: Record<string, string>) {
 
   setdata(public_data, private_data);
   writeStatusMessage("Thank you for making an account, you may login!");
-}
-
-function writeStatusMessage(message: string) {
-  const loginStatusMessage = document.getElementById("loginStatusMessage");
-  if (loginStatusMessage) {
-    loginStatusMessage.innerHTML = message;
-  }
 }
 
 function getCurrentUser(): User {

@@ -14,4 +14,7 @@ export default defineConfig({
       "firebase/app",
     ],
   },
+  build: {
+    target: "esnext",
+  },
 });
