@@ -1,3 +1,6 @@
+import { login } from "../scripts/login/login.ts";
+import { signup } from "../scripts/login/signup.ts";
+
 // LoginPanel.jsx
 function LoginPanel() {
   return (
@@ -15,7 +18,7 @@ function LoginPanel() {
 function SignupSection() {
   return (
     <div className="section-box">
-      <form id="loginForm" className="form">
+      <form id="loginForm" className="form" onSubmit={signup}>
         <h2>Sign Up</h2>
 
         <label htmlFor="username">Username:</label>
@@ -47,7 +50,7 @@ function LoginSection() {
       <h2>Login</h2>
 
       <div className="flex-center">
-        <button className="button" id="loginButton" type="submit">
+        <button className="button" onClick={login}>
           Login with Google
         </button>
       </div>

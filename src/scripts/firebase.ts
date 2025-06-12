@@ -29,6 +29,8 @@ export function fb_initialise() {
 }
 
 export async function fb_authenticate() {
+  console.log("authenticating");
+
   const AUTH = getAuth();
   const PROVIDER = new GoogleAuthProvider();
 

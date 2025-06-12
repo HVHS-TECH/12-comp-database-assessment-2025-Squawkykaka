@@ -5,6 +5,7 @@ const { getAuth } = await import("firebase/auth");
 import { fb_authenticate, FB_GAMEDB } from "../firebase";
 import { type User } from "firebase/auth";
 import { writeStatusMessage } from "../util";
+import type { FormEvent } from "react";
 
 // Steps i need to do
 // First get user's prefered usename and gender maybe ✅
@@ -15,26 +16,24 @@ import { writeStatusMessage } from "../util";
 
 // If logging in, check if the user has setup an account, and if they havnt send an error.
 
-export function setupSignUpListener() {
-  const form = document.getElementById("loginForm") as HTMLFormElement;
+export function signup(event: FormEvent<HTMLFormElement>) {
+  event.preventDefault();
 
-  if (form === null) {
-    return;
-  }
+  // Get current form
+  const form = event.currentTarget;
 
-  form.addEventListener("submit", (event) => {
-    event.preventDefault();
+  // Make a new object to hold form data
+  const formData: Record<string, string> = {};
 
-    const formData: Record<string, string> = {};
-
-    new FormData(form).forEach((value, key) => {
-      if (typeof value === "string") {
-        formData[key] = value.toLowerCase();
-      }
-    });
-
-    authenticateUser(formData);
+  // Go over every element and save value
+  new FormData(form).forEach((value, key) => {
+    if (typeof value === "string") {
+      formData[key] = value.toLowerCase();
+    }
   });
+
+  console.log(formData);
+  authenticateUser(formData);
 }
 
 async function authenticateUser(formData: Record<string, string>) {

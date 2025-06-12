@@ -1,12 +1,14 @@
-// import { fb_authenticate } from "../firebase";
+import type { MouseEvent } from "react";
+import { fb_authenticate } from "../firebase.ts";
 
-export function setupLoginListener() {
-  document.getElementById("loginButton")!.addEventListener("click", login);
-}
-
-async function login(event: Event) {
-  //   const auth = await fb_authenticate();
-
+export function login(event: MouseEvent<HTMLButtonElement>) {
   console.log(event);
-  window.location.href = "./games";
+
+  fb_authenticate()
+    .then(() => {
+      window.location.href = "../games";
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 }

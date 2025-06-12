@@ -1,9 +1,7 @@
 import { fb_initialise } from "./firebase.ts";
-import { setupLoginListener } from "./login/login.ts";
-import { setupSignUpListener } from "./login/signup.ts";
 
 document.addEventListener("DOMContentLoaded", () => {
-  setupSignUpListener();
-  setupLoginListener();
+  console.log("page loaded");
+
   fb_initialise();
 });
