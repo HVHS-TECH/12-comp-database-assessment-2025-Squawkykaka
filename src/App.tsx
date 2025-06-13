@@ -6,18 +6,9 @@ import Games from "./pages/Games.tsx";
 const App = () => (
   <div style={{ textAlign: "center" }}>
     <Routes>
-      <Route
-        path="/12-comp-database-assessment-2025-Squawkykaka"
-        element={<div>Welcome to the Home page</div>}
-      />
-      <Route
-        path="/12-comp-database-assessment-2025-Squawkykaka/login"
-        element={<Login />}
-      />
-      <Route
-        path="/12-comp-database-assessment-2025-Squawkykaka/games"
-        element={<Games />}
-      />
+      <Route path="/" element={<div>Welcome to the Home page</div>} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/games" element={<Games />} />
     </Routes>
   </div>
 );
