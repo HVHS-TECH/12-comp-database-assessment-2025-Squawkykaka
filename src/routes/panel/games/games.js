@@ -1,12 +1,5 @@
 export const games = [
 	{
-		title: 'Test',
-		image: '/images/bearassult.avif',
-		slug: 'test',
-		description: 'This is a test game',
-		url: 'https://www.youtube.com/watch?v=E4WlUXrJgy4'
-	},
-	{
 		title: 'Painting',
 		image: '/images/painting.jpg',
 		slug: 'painting',

@@ -1,11 +1,9 @@
 <script lang="ts">
 	let { data } = $props();
-
-	// window.location.href = data.current_game?.url || '/panel/games';
 </script>
 
 hello
-{#if data.current_game}
+<!-- {#if data.current_game}
 	<div>
 		<iframe
 			src={data.current_game.url}
@@ -23,4 +21,4 @@ hello
 			Your browser doesn't support iframes
 		</iframe>
 	</div>
-{/if}
+{/if} -->

@@ -1,14 +1,13 @@
 <script lang="ts">
 	import * as Select from '$lib/components/ui/select/index.js';
 
+	let { value = $bindable('') } = $props();
 	const genders = [
 		{ value: 'male', label: 'Male' },
 		{ value: 'female', label: 'Female' },
 		{ value: 'other', label: 'Other' },
 		{ value: 'prefer-not', label: 'Id prefer not to say' }
 	];
-
-	let value = $state('');
 
 	const triggerContent = $derived(
 		genders.find((f) => f.value === value)?.label ?? 'Select a gender'

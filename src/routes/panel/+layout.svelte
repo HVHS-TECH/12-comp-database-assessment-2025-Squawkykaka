@@ -1,17 +1,20 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { FB_GAMEAPP } from '$lib/firebase';
-	import { getAuth, signOut } from 'firebase/auth';
+	import { authUser } from '$lib/authStore';
+	import { fb_auth } from '$lib/firebase';
+	import { signOut } from 'firebase/auth';
 	let { children } = $props();
 
-	const auth = getAuth(FB_GAMEAPP);
-	const photoUrl = auth.currentUser?.photoURL;
-
-	function logout() {
-		signOut(getAuth());
-
-		goto('/login');
-	}
+	const handleLogout = () => {
+		signOut(fb_auth)
+			.then(() => {
+				$authUser = undefined;
+				goto('/login');
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	};
 </script>
 
 <div class="overflow-hidden">
@@ -32,21 +35,9 @@
 			<button
 				type="button"
 				class="cursor-pointer rounded bg-white px-4 py-2 text-black hover:bg-gray-200"
-				onclick={logout}>Logout</button
+				onclick={handleLogout}>Logout</button
 			>
 		</div>
-
-		<!-- Right: Overhanging user profile -->
-		{#if photoUrl}
-			<div class="absolute top-1/2 -right-4 -translate-y-1/2">
-				<img
-					src={photoUrl}
-					alt="The current user's profile."
-					class="h-20 w-20 rounded-full border-4 border-amber-500 shadow-lg select-none"
-					referrerpolicy="no-referrer"
-				/>
-			</div>
-		{/if}
 	</nav>
 </div>
 
