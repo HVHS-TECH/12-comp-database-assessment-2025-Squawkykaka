@@ -4,7 +4,11 @@
 	import { Button } from '$lib/components/ui/button';
 	import { Input } from '$lib/components/ui/input';
 	import { fb_auth } from '$lib/firebase';
-	import { AuthErrorCodes, signInWithEmailAndPassword } from 'firebase/auth';
+	import {
+		AuthErrorCodes,
+		browserSessionPersistence,
+		signInWithEmailAndPassword
+	} from 'firebase/auth';
 
 	let email: string = $state('');
 	let password: string = $state('');
