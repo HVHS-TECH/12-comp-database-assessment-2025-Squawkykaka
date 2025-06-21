@@ -1,6 +1,50 @@
-<script>
-	let { children } = $props();
+<script lang="ts">
+	import { goto } from '$app/navigation';
+	import { authUser } from '$lib/authStore';
+	import { fb_auth } from '$lib/firebase';
+	import { signOut } from 'firebase/auth';
 	import '../app.css';
+
+	let { children } = $props();
+
+	const handleLogout = () => {
+		signOut(fb_auth)
+			.then(() => {
+				$authUser = undefined;
+				goto('/login');
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	};
 </script>
 
+<div class="overflow-hidden">
+	<nav
+		class="relative m-3 mr-5 flex h-16 items-center justify-between space-x-4 overflow-visible rounded-2xl border-2 bg-amber-500 px-4 select-none"
+	>
+		{#if $authUser}
+			<a href="/panel/games">Games</a>
+			<a href="/panel/leaderboard">Leaderboard</a>
+			<a href="/panel/settings">Settings</a>
+
+			<button
+				type="button"
+				class="cursor-pointer rounded bg-white px-4 py-2 text-black hover:bg-gray-200"
+				onclick={handleLogout}>Logout</button
+			>
+		{:else if $authUser === undefined}
+			<a href="/register">Register</a>
+			<a href="/login">Login</a>
+		{/if}
+	</nav>
+</div>
+
 {@render children()}
+
+<style>
+	@reference "tailwindcss";
+	a {
+		@apply rounded bg-white px-4 py-2 text-black hover:bg-gray-200;
+	}
+</style>
