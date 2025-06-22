@@ -1,12 +1,12 @@
 <script lang="ts">
-	import { Button, Root } from '$lib/components/ui/button';
+	import { Button } from '$lib/components/ui/button';
 	import { Input } from '$lib/components/ui/input';
 	import { AuthErrorCodes, createUserWithEmailAndPassword } from 'firebase/auth';
 	import GenderDropdown from './GenderDropdown.svelte';
 	import { fb_auth, fb_db } from '$lib/firebase';
 	import { goto } from '$app/navigation';
-	import { addDoc, collection } from 'firebase/firestore';
-	import * as Select from '$lib/components/ui/select/index.js';
+	import { setDoc, doc } from 'firebase/firestore';
+	import { authUser } from '$lib/authStore';
 
 	let email: string = $state('');
 	let password: string = $state('');
@@ -19,17 +19,24 @@
 
 	const register = async () => {
 		try {
-			await createUserWithEmailAndPassword(fb_auth, email, password);
+			let userCredential = await createUserWithEmailAndPassword(fb_auth, email, password);
 
-			await addDoc(collection(fb_db, 'users'), {
+			await setDoc(doc(fb_db, 'users', userCredential.user.uid), {
 				username: username,
 				gender: gender,
 				registered: new Date().toISOString()
 			});
 
+			if (!userCredential.user.email) throw 'Email is null';
+
+			$authUser = {
+				uid: userCredential.user.uid,
+				email: userCredential.user.email
+			};
+
 			console.log('User registered successfully');
 
-			goto('/login');
+			goto('/panel/games');
 		} catch (error: any) {
 			errorCode = error.code;
 			errorMessage = error.message;
