@@ -1,24 +1,36 @@
 <script lang="ts">
-	let { data } = $props();
+	import { page } from '$app/state';
+	import { collectGames } from '$lib/gameStore.js';
+	import { error } from '@sveltejs/kit';
+
+	let isLoading = $state(true); // Track loading state
+	let currentGame;
+
+	async function redirectToGame() {
+		const games = await collectGames();
+		currentGame = games.find((game) => game.slug === page.params.slug);
+
+		if (currentGame) {
+			isLoading = false; // Stop loading
+			window.location.href = currentGame.url; // Redirect to the game
+		} else {
+			isLoading = false; // Stop loading
+			error(404, {
+				message: 'Game not found'
+			});
+		}
+	}
+
+	redirectToGame();
 </script>
 
-hello
-<!-- {#if data.current_game}
-	<div>
-		<iframe
-			src={data.current_game.url}
-			frameborder="0"
-			title={data.current_game.title}
-			height="800"
-			width="800"
-		></iframe>
+{#if isLoading}
+	<p>Loading...</p>
+	<!-- Display loading message -->
+{:else}
+	<!-- Redirect logic handled in script -->
+{/if}
 
-		<iframe
-			title={data.current_game.title}
-			src="mypage.html"
-			style="position:fixed; top:0; left:0; bottom:0; right:0; width:100%; height:100%; border:none; margin:0; padding:0; overflow:hidden; z-index:999999;"
-		>
-			Your browser doesn't support iframes
-		</iframe>
-	</div>
-{/if} -->
+{#if page.error}
+	<h1>{page.status}: {page.error.message}</h1>
+{/if}

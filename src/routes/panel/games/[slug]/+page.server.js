@@ -1,7 +1,15 @@
-import { games } from '../games.js';
+import { collectGames } from '$lib/gameStore';
 
-export function load({ params }) {
-	const current_game = games.find((game) => game.slug === params.slug) || null;
+export async function load({ params }) {
+	async function getCurrentGame() {
+		const game_list = await collectGames();
+
+		const current_game = game_list.find((game) => game.slug === params.slug) || null;
+
+		return current_game;
+	}
+
+	const current_game = getCurrentGame();
 
 	return {
 		current_game
