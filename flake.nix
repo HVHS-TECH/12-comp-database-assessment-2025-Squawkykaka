@@ -20,7 +20,12 @@
             firebase-tools
             nodejs_20
             eslint
+            patchelf
           ];
+
+          shellHook = ''
+            patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" node_modules/@cloudflare/workerd-linux-64/bin/workerd
+          '';
         };
       }
     );
