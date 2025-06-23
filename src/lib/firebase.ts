@@ -23,6 +23,7 @@ export const fb_db = getFirestore(fb_app);
 export const fb_auth = getAuth(fb_app);
 setPersistence(fb_auth, browserSessionPersistence);
 
+// This makes sure $authUser is always up to date, meaning page reloads dont break auth.
 onAuthStateChanged(fb_auth, (user) => {
 	if (user) {
 		if (!user.email) {

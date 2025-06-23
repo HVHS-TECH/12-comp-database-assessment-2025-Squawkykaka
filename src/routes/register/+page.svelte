@@ -6,7 +6,6 @@
 	import { fb_auth, fb_db } from '$lib/firebase';
 	import { goto } from '$app/navigation';
 	import { setDoc, doc } from 'firebase/firestore';
-	import { authUser } from '$lib/authStore';
 
 	let email: string = $state('');
 	let password: string = $state('');

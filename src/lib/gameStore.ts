@@ -2,7 +2,7 @@ import { collection, getDocs } from 'firebase/firestore';
 import { writable } from 'svelte/store';
 import { fb_db } from './firebase';
 
-interface Game {
+export interface Game {
 	url: string;
 	image: string;
 	slug: string;
