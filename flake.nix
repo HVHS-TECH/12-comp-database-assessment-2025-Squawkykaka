@@ -18,7 +18,7 @@
         devShell = pkgs.mkShell {
           buildInputs = with pkgs; [
             firebase-tools
-            nodejs_24
+            nodejs_20
             eslint
           ];
         };
