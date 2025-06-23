@@ -1,1 +1,1 @@
-<h1>Games</h1>
+<h1>Select a Game</h1>

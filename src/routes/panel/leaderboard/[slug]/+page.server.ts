@@ -9,7 +9,7 @@ export async function load({ params }) {
 		return current_game;
 	}
 
-	const current_game = getCurrentGame();
+	const current_game = await getCurrentGame();
 
 	return {
 		current_game

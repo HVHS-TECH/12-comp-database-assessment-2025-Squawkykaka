@@ -29,11 +29,6 @@
 
 			if (!userCredential.user.email) throw 'Email is null';
 
-			$authUser = {
-				uid: userCredential.user.uid,
-				email: userCredential.user.email
-			};
-
 			console.log('User registered successfully');
 
 			goto('/panel/games');

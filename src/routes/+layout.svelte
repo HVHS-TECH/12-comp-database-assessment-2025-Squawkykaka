@@ -10,7 +10,6 @@
 	const handleLogout = () => {
 		signOut(fb_auth)
 			.then(() => {
-				$authUser = undefined;
 				goto('/login');
 			})
 			.catch((error) => {

@@ -15,12 +15,7 @@
 
 	const login = () => {
 		signInWithEmailAndPassword(fb_auth, email, password)
-			.then((userCredential) => {
-				$authUser = {
-					uid: userCredential.user.uid,
-					email: userCredential.user.email || ''
-				};
-
+			.then(() => {
 				goto('/panel/games');
 			})
 			.catch((error) => {
