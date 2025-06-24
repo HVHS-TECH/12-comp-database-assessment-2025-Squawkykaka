@@ -8,6 +8,7 @@
 	import { setDoc, doc } from 'firebase/firestore';
 
 	let email: string = $state('');
+	let name: string = $state('');
 	let password: string = $state('');
 	let username: string = $state('');
 	let gender: string = $state('');
@@ -20,10 +21,18 @@
 		try {
 			let userCredential = await createUserWithEmailAndPassword(fb_auth, email, password);
 
+			/**
+			 * Set Public user data to 'users'
+			 */
 			await setDoc(doc(fb_db, 'users', userCredential.user.uid), {
 				username: username,
-				gender: gender,
 				registered: new Date().toISOString()
+			});
+
+			// Set privatedata to userPrivate
+			await setDoc(doc(fb_db, 'usersPrivate', userCredential.user.uid), {
+				name: name,
+				gender: gender
 			});
 
 			if (!userCredential.user.email) throw 'Email is null';
@@ -56,6 +65,7 @@
 				register();
 			}}
 		>
+			<Input type="text" placeholder="Name" required bind:value={name} />
 			<Input type="text" placeholder="Username" required bind:value={username} />
 			<Input type="email" placeholder="Email" required bind:value={email} />
 			<Input type="password" placeholder="Password" required bind:value={password} />
