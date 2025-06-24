@@ -15,7 +15,7 @@
 	const login = () => {
 		signInWithEmailAndPassword(fb_auth, email, password)
 			.then(() => {
-				goto('/panel/games');
+				goto('/games');
 			})
 			.catch((error) => {
 				errorCode = error.code;

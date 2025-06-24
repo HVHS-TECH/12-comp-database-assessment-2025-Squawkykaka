@@ -10,7 +10,7 @@
 		<aside class="flex w-1/4 flex-col flex-nowrap gap-1 rounded-2xl bg-orange-100">
 			{#each games as game}
 				<a
-					href="/panel/leaderboard/{game.slug}"
+					href="/leaderboard/{game.slug}"
 					class="h-fit w-full rounded-xl border-2 bg-white p-2 text-center">{game.title}</a
 				>
 			{/each}

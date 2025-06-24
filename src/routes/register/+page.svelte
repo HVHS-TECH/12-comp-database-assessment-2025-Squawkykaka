@@ -39,7 +39,7 @@
 
 			console.log('User registered successfully');
 
-			goto('/panel/games');
+			goto('/games');
 		} catch (error: any) {
 			errorCode = error.code;
 			errorMessage = error.message;

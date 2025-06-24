@@ -7,5 +7,5 @@ import type { PageLoad } from './$types';
 export const prerender = true;
 
 export const load: PageLoad = async () => {
-	redirect(301, '/panel/games');
+	redirect(301, '/games');
 };

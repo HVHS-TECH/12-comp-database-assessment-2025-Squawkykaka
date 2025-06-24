@@ -13,7 +13,7 @@ export interface Game {
 	id: string; // The path the game is stored under in firebase
 	url: string; // Url to go to when clicked
 	image: string; // Image to display
-	slug: string; // The subpath of the game, e.g. /panel/games/rickroll
+	slug: string; // The subpath of the game, e.g. /games/rickroll
 	title: string; // The display name of the game.
 	description: string; // the description, appears below in the title.
 	scoreDisplay?: ScoreDisplay; // The way the score is displayed in the leaderboard.
