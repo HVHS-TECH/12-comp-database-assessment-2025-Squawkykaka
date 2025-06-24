@@ -27,11 +27,7 @@
 		{#if $authUser}
 			<a href="/settings">Settings</a>
 
-			<button
-				type="button"
-				class="cursor-pointer rounded bg-white px-4 py-2 text-black hover:bg-gray-200"
-				onclick={handleLogout}>Logout</button
-			>
+			<button type="button" onclick={handleLogout}>Logout</button>
 		{:else if $authUser === undefined}
 			<a href="/register">Register</a>
 			<a href="/login">Login</a>
@@ -43,7 +39,8 @@
 
 <style>
 	@reference "tailwindcss";
-	a {
-		@apply rounded bg-white px-4 py-2 text-black hover:bg-gray-200;
+	a,
+	button {
+		@apply cursor-pointer rounded bg-white px-4 py-2 text-black hover:bg-gray-200;
 	}
 </style>

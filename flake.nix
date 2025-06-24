@@ -25,7 +25,7 @@
           ];
 
           shellHook = ''
-            patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" node_modules/@cloudflare/workerd-linux-64/bin/workerd
+            patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" node_modules/.pnpm/@cloudflare+workerd-linux-64@1.20250617.0/node_modules/@cloudflare/workerd-linux-64/bin/workerd
           '';
         };
       }
