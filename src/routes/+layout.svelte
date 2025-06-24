@@ -22,9 +22,9 @@
 	<nav
 		class="relative m-3 mr-5 flex h-16 items-center justify-between space-x-4 overflow-visible rounded-2xl border-2 bg-amber-500 px-4 select-none"
 	>
+		<a href="/panel/games">Games</a>
+		<a href="/panel/leaderboard">Leaderboard</a>
 		{#if $authUser}
-			<a href="/panel/games">Games</a>
-			<a href="/panel/leaderboard">Leaderboard</a>
 			<a href="/panel/settings">Settings</a>
 
 			<button
