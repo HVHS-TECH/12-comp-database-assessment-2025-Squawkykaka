@@ -3,9 +3,7 @@ import { writable } from 'svelte/store';
 import { fb_db } from './firebase';
 
 export interface ScoreDisplay {
-	[key: string]: {
-		displayName: string;
-	};
+	displayName: string;
 }
 
 // Figure out types for score display
@@ -16,11 +14,11 @@ export interface Game {
 	slug: string; // The subpath of the game, e.g. /games/rickroll
 	title: string; // The display name of the game.
 	description: string; // the description, appears below in the title.
-	scoreDisplay?: ScoreDisplay; // The way the score is displayed in the leaderboard.
+	scoreDisplay: ScoreDisplay; // The way the score is displayed in the leaderboard.
 }
 
 // Modify GamesCollection to allow an array of games
-type GamesCollection = Game[];
+type GamesCollection = { [id: string]: Game };
 
 // Update the writable store to match the new type
 export const gameList = writable<GamesCollection | undefined>(undefined);
@@ -32,26 +30,25 @@ export async function collectGames() {
 		gameListValue = value;
 	})();
 
-	if (gameListValue && gameList) {
+	if (gameListValue && Object.keys(gameListValue).length > 0) {
 		return gameListValue; // Return existing game list if already filled
 	}
 
 	const gameQuery = query(collection(fb_db, 'games'), limit(10));
 	const gameSnap = await getDocs(gameQuery);
 
-	const game_list: GamesCollection = gameSnap.docs.map((game) => {
-		const data = game.data();
-
-		return {
-			id: data.id,
-			title: data.title,
-			image: data.image,
-			slug: data.slug,
-			description: data.description,
-			url: data.url,
-			scoreDisplay: data.scoreDisplay ?? undefined // Ensure undefined if missing
+	const game_list = gameSnap.docs.reduce((acc, doc) => {
+		acc[doc.id] = {
+			id: doc.id,
+			title: doc.data().title,
+			image: doc.data().image,
+			slug: doc.data().slug,
+			description: doc.data().description,
+			url: doc.data().url,
+			scoreDisplay: doc.data().scoreDisplay
 		};
-	});
+		return acc;
+	}, {} as GamesCollection);
 
 	gameList.set(game_list);
 

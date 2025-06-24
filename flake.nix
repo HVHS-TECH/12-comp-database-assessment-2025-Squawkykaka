@@ -21,6 +21,7 @@
             nodejs_20
             eslint
             patchelf
+            pnpm
           ];
 
           shellHook = ''
