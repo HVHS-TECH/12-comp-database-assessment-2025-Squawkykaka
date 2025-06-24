@@ -7,6 +7,8 @@ import {
 } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 import { authUser } from './authStore';
+import { initializeAppCheck, ReCaptchaV3Provider } from 'firebase/app-check';
+import { browser } from '$app/environment';
 
 // 🔐 Firebase Config (suggest: move to env variables in production)
 const firebaseConfig = {
@@ -22,6 +24,16 @@ export const fb_app = initializeApp(firebaseConfig, 'CLIENT');
 export const fb_db = getFirestore(fb_app);
 export const fb_auth = getAuth(fb_app);
 setPersistence(fb_auth, browserSessionPersistence);
+
+if (browser) {
+	initializeAppCheck(fb_app, {
+		provider: new ReCaptchaV3Provider('6Ld0hGsrAAAAAPZMTdnXystT0JCIoIXD-jVxdtaj'),
+
+		// Optional argument. If true, the SDK automatically refreshes App Check
+		// tokens as needed.
+		isTokenAutoRefreshEnabled: true
+	});
+}
 
 // This makes sure $authUser is always up to date, meaning page reloads dont break auth.
 onAuthStateChanged(fb_auth, (user) => {

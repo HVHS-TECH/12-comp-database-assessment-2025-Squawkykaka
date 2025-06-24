@@ -1,18 +1,15 @@
 <script lang="ts">
 	import { page } from '$app/state';
-	import { collectGames } from '$lib/gameStore.js';
 	import { error } from '@sveltejs/kit';
 
+	const { data } = $props();
+
 	let isLoading = $state(true); // Track loading state
-	let currentGame;
 
 	async function redirectToGame() {
-		const games = await collectGames();
-		currentGame = games.find((game) => game.slug === page.params.slug);
-
-		if (currentGame) {
+		if (data.current_game) {
 			isLoading = false; // Stop loading
-			window.location.href = currentGame.url; // Redirect to the game
+			window.location.href = data.current_game.url; // Redirect to the game
 		} else {
 			isLoading = false; // Stop loading
 			error(404, {
