@@ -6,7 +6,7 @@
 		{ value: 'male', label: 'Male' },
 		{ value: 'female', label: 'Female' },
 		{ value: 'other', label: 'Other' },
-		{ value: 'prefer-not', label: 'Id prefer not to say' }
+		{ value: 'prefer-not', label: `I'd prefer not to say` }
 	];
 
 	const triggerContent = $derived(

@@ -42,5 +42,6 @@
 	a,
 	button {
 		@apply cursor-pointer rounded bg-white px-4 py-2 text-black hover:bg-gray-200;
+		/* background-color: red; */
 	}
 </style>
