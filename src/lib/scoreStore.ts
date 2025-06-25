@@ -14,9 +14,17 @@ export interface GameScoresList {
 	[game_id: string]: GameScores;
 }
 
-// Update the writable store to match the new type
+// This is a store which contains currently fetched game leaderboards.
 export const leaderBoardScores = writable<GameScoresList | undefined>(undefined);
 
+/**
+ * function to fetch the scores of a specific game, then save it in a store
+ * so that if we navigate to another and back, we dont fetch data twice
+ *
+ * @remarks This function is a work in progress.
+ * @param game_id The id for game, the same one as defined in Game
+ * @returns
+ */
 export async function getGameScores(game_id: string) {
 	// Check if current game already has data fetched, if so return.
 	let currentGameScores: GameScoresList | undefined;
@@ -26,7 +34,7 @@ export async function getGameScores(game_id: string) {
 
 	// If currentGameScores is undefined it means we need to fecth data.
 	if (currentGameScores == undefined) {
-		const gameScore = await getGameScore(game_id);
+		const gameScore = await fb_fetchGameScore(game_id);
 
 		console.log(gameScore);
 
@@ -44,7 +52,8 @@ export async function getGameScores(game_id: string) {
 	// Return.
 }
 
-async function getGameScore(game_id: string) {
+// This function fetches the scores from firebase without any checks, used in getGameScores for actually fetching data.
+async function fb_fetchGameScore(game_id: string) {
 	const scoreQuery = query(
 		collection(fb_db, `games/${game_id}/scores`), // Path to the scores subcollection
 		orderBy('score', 'desc'), // Order by score in descending order

@@ -10,7 +10,7 @@ import { authUser } from './authStore';
 import { initializeAppCheck, ReCaptchaV3Provider } from 'firebase/app-check';
 import { browser } from '$app/environment';
 
-// 🔐 Firebase Config (suggest: move to env variables in production)
+// 🔐 Firebase Config
 const firebaseConfig = {
 	apiKey: 'AIzaSyBhJq8DHRu56v_NXgqkhhp8WS-dRsbhK2A',
 	authDomain: 'database-asessment-squawkykaka.firebaseapp.com',
@@ -20,11 +20,13 @@ const firebaseConfig = {
 	appId: '1:951735245072:web:c42551811a8ae8bcb32d95'
 };
 
+// Export the firebase apps, this means they only get loaded once.
 export const fb_app = initializeApp(firebaseConfig, 'CLIENT');
 export const fb_db = getFirestore(fb_app);
 export const fb_auth = getAuth(fb_app);
 setPersistence(fb_auth, browserSessionPersistence);
 
+// If on the browser, initialise ReCaptcha
 if (browser) {
 	initializeAppCheck(fb_app, {
 		provider: new ReCaptchaV3Provider('6Ld0hGsrAAAAAPZMTdnXystT0JCIoIXD-jVxdtaj'),

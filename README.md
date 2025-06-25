@@ -1,38 +1,9 @@
-# sv
+# overview
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+This project used svelteKit and firebase, page routes are defined in src/routes which map to paths,
+e.g. src/routes/login means you go to /login to see the pages info.
 
-## Creating a project
+I got most of my info on how this works from these documentation pages
 
-If you're seeing this, you've probably already done this step. Congrats!
-
-```bash
-# create a new project in the current directory
-npx sv create
-
-# create a new project in my-app
-npx sv create my-app
-```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+- [Firebase](https://firebase.google.com/docs/build)
+- [SvelteKit](https://svelte.dev/docs/svelte/overview)

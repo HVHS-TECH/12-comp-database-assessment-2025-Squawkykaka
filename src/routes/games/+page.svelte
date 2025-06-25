@@ -8,11 +8,14 @@ If the game is clicked go to a page for that game which is fullscreen
 	import { collectGames } from '$lib/gameStore.js';
 </script>
 
+<!-- Waits for the games to load, then display data. -->
 {#await collectGames()}
 	<p>Loading Games</p>
 {:then games}
 	<div class="mx-auto box-border grid max-w-full grid-cols-3 gap-4 overflow-x-hidden p-4">
+		<!-- For each game, extract the data -->
 		{#each Object.values(games) as { id, title, image, slug, description }}
+			<!-- Make a button containing picture, title, id -->
 			<button onclick={() => goto(`/games/${slug}`)} class="cursor-pointer">
 				<section class="box-border rounded-lg border-4 shadow-lg transition-shadow hover:shadow-xl">
 					<h2 class="text-center text-2xl font-bold">{title}</h2>
