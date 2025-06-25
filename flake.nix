@@ -22,6 +22,7 @@
             eslint
             patchelf
             pnpm
+            imagemagick
           ];
 
           shellHook = ''

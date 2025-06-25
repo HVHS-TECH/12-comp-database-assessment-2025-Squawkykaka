@@ -16,7 +16,12 @@ If the game is clicked go to a page for that game which is fullscreen
 			<button onclick={() => goto(`/games/${slug}`)} class="cursor-pointer">
 				<section class="box-border rounded-lg border-4 shadow-lg transition-shadow hover:shadow-xl">
 					<h2 class="text-center text-2xl font-bold">{title}</h2>
-					<img src={image} alt={title} class="h-80 w-full rounded-t-lg object-cover" />
+					<img
+						src={image}
+						alt={title}
+						fetchpriority="high"
+						class="h-80 w-full rounded-t-lg object-cover"
+					/>
 					<p class="p-2 text-sm text-gray-700">{description}</p>
 				</section>
 			</button>

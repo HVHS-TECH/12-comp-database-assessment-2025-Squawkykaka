@@ -5,27 +5,33 @@
 
 	let { data } = $props();
 
-	console.log(data.current_game.id);
-	// getGameScores(data.current_game.id);
+	// console.log(data.current_game.id);
+	// // getGameScores(data.current_game.id);
 
-	// const topScoresPromise = getDocs(scoreQuery);
+	// // const topScoresPromise = getDocs(scoreQuery);
 
-	const score_display = data.current_game.scoreDisplay;
+	// const score_display = data.current_game.scoreDisplay;
 </script>
 
-<h2>{data.current_game.title}</h2>
+{#await data.current_game then current_game}
+	{#if !current_game}
+		This game doesnt exist.
+	{:else}
+		<h2>{current_game.title}</h2>
 
-<table>
-	<thead>
-		<tr>
-			<th scope="col">Username</th>
-			<th scope="col">{score_display.displayName}</th>
-		</tr>
-	</thead>
-	<tbody>
-		<tr>
-			<th scope="row">Bobthebuilder</th>
-			<td>22</td>
-		</tr>
-	</tbody>
-</table>
+		<table>
+			<thead>
+				<tr>
+					<th scope="col">Username</th>
+					<th scope="col">{current_game.scoreDisplay.displayName}</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<th scope="row">Bobthebuilder</th>
+					<td>22</td>
+				</tr>
+			</tbody>
+		</table>
+	{/if}
+{/await}

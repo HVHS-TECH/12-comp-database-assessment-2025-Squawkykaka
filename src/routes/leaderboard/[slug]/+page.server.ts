@@ -11,11 +11,7 @@ export async function load({ params }) {
 		return current_game;
 	}
 
-	const current_game = await getCurrentGame();
-
-	if (!current_game) {
-		error(404, 'That game does not exist');
-	}
+	const current_game = getCurrentGame();
 
 	return {
 		current_game
