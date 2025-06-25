@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { browser } from '$app/environment';
 	import { page } from '$app/state';
 	import { error } from '@sveltejs/kit';
 
@@ -18,7 +19,9 @@
 		}
 	}
 
-	redirectToGame();
+	if (browser) {
+		redirectToGame();
+	}
 </script>
 
 {#if isLoading}

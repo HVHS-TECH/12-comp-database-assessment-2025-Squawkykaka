@@ -8,7 +8,7 @@
 {:then games}
 	<div class="flex">
 		<aside class="flex w-1/4 flex-col flex-nowrap gap-1 rounded-2xl bg-orange-100">
-			{#each games as game}
+			{#each Object.values(games) as game}
 				<a
 					href="/leaderboard/{game.slug}"
 					class="h-fit w-full rounded-xl border-2 bg-white p-2 text-center">{game.title}</a

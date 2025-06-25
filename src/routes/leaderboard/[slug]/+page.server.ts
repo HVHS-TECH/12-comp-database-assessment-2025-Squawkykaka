@@ -5,7 +5,8 @@ export async function load({ params }) {
 	async function getCurrentGame() {
 		const game_list = await collectGames();
 
-		const current_game: Game | null = game_list.find((game) => game.slug === params.slug) || null;
+		const current_game: Game | null =
+			Object.values(game_list).find((game) => game.slug === params.slug) || null;
 
 		return current_game;
 	}

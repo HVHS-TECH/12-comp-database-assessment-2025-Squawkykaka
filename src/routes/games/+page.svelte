@@ -11,15 +11,13 @@ If the game is clicked go to a page for that game which is fullscreen
 {#await collectGames()}
 	<p>Loading Games</p>
 {:then games}
-	<div
-		class="mx-auto box-border grid max-w-full grid-cols-3 grid-rows-3 gap-4 overflow-x-hidden p-4"
-	>
-		{#each games as { title, image, slug, description }}
+	<div class="mx-auto box-border grid max-w-full grid-cols-3 gap-4 overflow-x-hidden p-4">
+		{#each Object.values(games) as { id, title, image, slug, description }}
 			<button onclick={() => goto(`/games/${slug}`)} class="cursor-pointer">
-				<section class="box-border border-4">
-					<h2 class="text-center text-2xl">{title}</h2>
-					<img src={image} alt="A game" class="h-100 w-full object-cover" />
-					<p>{description}</p>
+				<section class="box-border rounded-lg border-4 shadow-lg transition-shadow hover:shadow-xl">
+					<h2 class="text-center text-2xl font-bold">{title}</h2>
+					<img src={image} alt={title} class="h-80 w-full rounded-t-lg object-cover" />
+					<p class="p-2 text-sm text-gray-700">{description}</p>
 				</section>
 			</button>
 		{/each}
