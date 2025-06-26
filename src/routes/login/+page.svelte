@@ -12,6 +12,8 @@
 	let errorCode: string | undefined = $state(undefined);
 	let errorMessage: string | undefined = $state(undefined);
 
+	// This function takes in the saved values, which automatically update
+	// using svelte states, and if its a success redirect.
 	const login = () => {
 		signInWithEmailAndPassword(fb_auth, email, password)
 			.then(() => {
@@ -55,7 +57,7 @@
 			{:else if errorCode === AuthErrorCodes.USER_DISABLED}
 				<p class="text-red-500">This user has been disabled.</p>
 			{:else if errorCode === AuthErrorCodes.INVALID_LOGIN_CREDENTIALS}
-				<p class="text-red-500">No user found with this email.</p>
+				<p class="text-red-500">No user found with this email or password.</p>
 			{:else if errorCode === AuthErrorCodes.INVALID_PASSWORD}
 				<p class="text-red-500">Incorrect password.</p>
 			{:else}

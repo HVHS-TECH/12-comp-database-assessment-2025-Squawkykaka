@@ -7,6 +7,7 @@
 
 	let { children } = $props();
 
+	// When you sign out, go to /login.
 	const handleLogout = () => {
 		signOut(fb_auth)
 			.then(() => {

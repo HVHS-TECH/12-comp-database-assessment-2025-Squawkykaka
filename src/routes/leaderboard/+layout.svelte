@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { collectGames } from '$lib/gameStore';
+
 	let { children } = $props();
 </script>
 
@@ -7,6 +8,7 @@
 	<p>Getting Games</p>
 {:then games}
 	<div class="flex">
+		<!-- Make a sidebar button for each game -->
 		<aside class="flex w-1/4 flex-col flex-nowrap gap-1 rounded-2xl bg-orange-100">
 			{#each Object.values(games) as game}
 				<a
@@ -16,6 +18,7 @@
 			{/each}
 		</aside>
 
+		<!-- Render the child page to the right. -->
 		<div class="w-full bg-amber-500">
 			{@render children()}
 		</div>

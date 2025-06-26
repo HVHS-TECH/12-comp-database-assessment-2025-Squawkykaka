@@ -1,4 +1,6 @@
 <script lang="ts">
+	// This is copied from the shadcn-svelte docs.
+
 	import * as Select from '$lib/components/ui/select/index.js';
 
 	let { value = $bindable('') } = $props();

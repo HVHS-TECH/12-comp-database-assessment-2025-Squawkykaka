@@ -21,20 +21,19 @@
 		try {
 			let userCredential = await createUserWithEmailAndPassword(fb_auth, email, password);
 
-			/**
-			 * Set Public user data to 'users'
-			 */
+			// Sets public data in a readable path
 			await setDoc(doc(fb_db, 'users', userCredential.user.uid), {
 				username: username,
 				registered: new Date().toISOString()
 			});
 
-			// Set privatedata to userPrivate
+			// Set private data in a non-readable path.
 			await setDoc(doc(fb_db, 'usersPrivate', userCredential.user.uid), {
 				name: name,
 				gender: gender
 			});
 
+			// Dumb check thats necissary.
 			if (!userCredential.user.email) throw 'Email is null';
 
 			console.log('User registered successfully');

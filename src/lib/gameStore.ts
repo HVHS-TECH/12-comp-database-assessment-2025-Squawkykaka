@@ -7,7 +7,7 @@ import { fb_db } from './firebase';
  */
 export interface Game {
 	/**
-	 * The randomly generated string for the games path.
+	 * The path of the game in firebase.
 	 */
 	id: string;
 
