@@ -67,8 +67,8 @@ async function fb_fetchGameScores(game_id: string): Promise<GameScores> {
 
 	// Convert Firestore data into a usable format with usernames.
 	const scorePromises = topScores.docs.map(async (scoreDoc) => {
-		// Get username for current user
 		const userDoc = await getDoc(doc(fb_db, 'users', scoreDoc.id));
+		// If use exists use username, otherwise unknown user.
 		const username = userDoc.exists() ? userDoc.data().username : 'Unknown User';
 
 		return {

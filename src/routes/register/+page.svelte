@@ -56,10 +56,12 @@
 			console.log('User registered successfully');
 
 			goto('/games');
-		} catch (error: any) {
-			errorCode = error.code;
-			errorMessage = error.message;
-			console.log(errorCode, errorMessage);
+		} catch (error) {
+			if (error instanceof Error) {
+				console.error(`${error.name}: ${error.message}`);
+			} else {
+				console.error('An unknown error occurred:', error);
+			}
 
 			success = false;
 		}
