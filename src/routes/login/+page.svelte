@@ -1,14 +1,9 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { authUser } from '$lib/authStore';
 	import { Button } from '$lib/components/ui/button';
 	import { Input } from '$lib/components/ui/input';
 	import { fb_auth } from '$lib/firebase';
-	import {
-		AuthErrorCodes,
-		browserSessionPersistence,
-		signInWithEmailAndPassword
-	} from 'firebase/auth';
+	import { AuthErrorCodes, signInWithEmailAndPassword } from 'firebase/auth';
 
 	let email: string = $state('');
 	let password: string = $state('');
@@ -17,15 +12,12 @@
 	let errorCode: string | undefined = $state(undefined);
 	let errorMessage: string | undefined = $state(undefined);
 
+	// This function takes in the saved values, which automatically update
+	// using svelte states, and if its a success redirect.
 	const login = () => {
 		signInWithEmailAndPassword(fb_auth, email, password)
-			.then((userCredential) => {
-				$authUser = {
-					uid: userCredential.user.uid,
-					email: userCredential.user.email || ''
-				};
-
-				goto('/panel/games');
+			.then(() => {
+				goto('/games');
 			})
 			.catch((error) => {
 				errorCode = error.code;
@@ -65,7 +57,7 @@
 			{:else if errorCode === AuthErrorCodes.USER_DISABLED}
 				<p class="text-red-500">This user has been disabled.</p>
 			{:else if errorCode === AuthErrorCodes.INVALID_LOGIN_CREDENTIALS}
-				<p class="text-red-500">No user found with this email.</p>
+				<p class="text-red-500">No user found with this email or password.</p>
 			{:else if errorCode === AuthErrorCodes.INVALID_PASSWORD}
 				<p class="text-red-500">Incorrect password.</p>
 			{:else}

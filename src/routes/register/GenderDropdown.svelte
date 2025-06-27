@@ -1,4 +1,6 @@
 <script lang="ts">
+	// This is copied from the shadcn-svelte docs.
+
 	import * as Select from '$lib/components/ui/select/index.js';
 
 	let { value = $bindable('') } = $props();
@@ -6,7 +8,7 @@
 		{ value: 'male', label: 'Male' },
 		{ value: 'female', label: 'Female' },
 		{ value: 'other', label: 'Other' },
-		{ value: 'prefer-not', label: 'Id prefer not to say' }
+		{ value: 'prefer-not', label: `I'd prefer not to say` }
 	];
 
 	const triggerContent = $derived(

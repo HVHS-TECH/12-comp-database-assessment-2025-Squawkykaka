@@ -18,9 +18,16 @@
         devShell = pkgs.mkShell {
           buildInputs = with pkgs; [
             firebase-tools
-            nodejs_24
+            nodejs_20
             eslint
+            patchelf
+            pnpm
+            imagemagick
           ];
+
+          shellHook = ''
+            patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" node_modules/.pnpm/@cloudflare+workerd-linux-64@1.20250617.0/node_modules/@cloudflare/workerd-linux-64/bin/workerd
+          '';
         };
       }
     );

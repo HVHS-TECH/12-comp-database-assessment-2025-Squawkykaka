@@ -1,44 +1,77 @@
-import { collection, getDocs } from 'firebase/firestore';
-import { writable } from 'svelte/store';
-import { fb_db } from './firebase';
+import { readable } from 'svelte/store';
+// import * as games from '$lib/games.json';
+const games: { default: GamesCollection } = await import('$lib/games.json');
 
-interface Game {
+/**
+ * Describes a game and all data needed to display one.
+ */
+export interface Game {
+	/**
+	 * The path of the game in firebase.
+	 */
+	id: string;
+
+	/**
+	 * The url where the game is located.
+	 */
 	url: string;
+
+	/**
+	 * The location of the image for use in displaying titles
+	 */
 	image: string;
+
+	/**
+	 * The short human readable id used for routes.
+	 * @example
+	 * ```mk
+	 * bear-attack
+	 * ```
+	 */
 	slug: string;
+
+	/**
+	 * The display name for the game.
+	 * @example
+	 * ```mk
+	 * Bear Attack
+	 * ```
+	 *
+	 * @remarks
+	 * Displayed above the image.
+	 */
 	title: string;
+
+	/**
+	 * Description used for the game
+	 *
+	 * @remarks
+	 * displayed below the image card.
+	 */
 	description: string;
+
+	/**
+	 * The human readable description on what the score
+	 * value for this game should be displayed as.
+	 *
+	 * @example
+	 * ```json
+	 * {
+	 * 	"scoreDisplay": {
+	 * 	 "displayName": "Time Survived"
+	 * 	}
+	 * }
+	 * ```
+	 */
+	scoreDisplay: {
+		displayName: string;
+	}; // The way the score is displayed in the leaderboard.
 }
 
 // Modify GamesCollection to allow an array of games
-type GamesCollection = Game[];
+export type GamesCollection = Game[];
 
-// Update the writable store to match the new type
-export const gameList = writable<GamesCollection | undefined>(undefined);
-
-export async function collectGames() {
-	let gameListValue;
-
-	gameList.subscribe((value) => {
-		gameListValue = value;
-	})();
-
-	if (gameListValue && gameList) {
-		return gameListValue; // Return existing game list if already filled
-	}
-
-	const gameRef = collection(fb_db, 'games');
-	const gameSnap = await getDocs(gameRef);
-
-	const game_list = gameSnap.docs.map((game) => ({
-		title: game.data().title,
-		image: game.data().image,
-		slug: game.data().slug,
-		description: game.data().description,
-		url: game.data().url
-	}));
-
-	gameList.set(game_list);
-
-	return game_list;
-}
+/**
+ * A  store which contains the list of games.
+ */
+export const gameList = readable<GamesCollection>(games.default);

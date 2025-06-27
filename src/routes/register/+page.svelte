@@ -1,14 +1,21 @@
 <script lang="ts">
-	import { Button, Root } from '$lib/components/ui/button';
+	import { Button } from '$lib/components/ui/button';
 	import { Input } from '$lib/components/ui/input';
-	import { AuthErrorCodes, createUserWithEmailAndPassword } from 'firebase/auth';
+	import { createUserWithEmailAndPassword } from 'firebase/auth';
 	import GenderDropdown from './GenderDropdown.svelte';
 	import { fb_auth, fb_db } from '$lib/firebase';
 	import { goto } from '$app/navigation';
-	import { addDoc, collection } from 'firebase/firestore';
-	import * as Select from '$lib/components/ui/select/index.js';
+	import { setDoc, doc, getDocs, query, collection, where } from 'firebase/firestore';
+
+	class UserNameInUseError extends Error {
+		constructor(message: string | undefined) {
+			super(message);
+			this.name = 'UserNameInUseError';
+		}
+	}
 
 	let email: string = $state('');
+	let name: string = $state('');
 	let password: string = $state('');
 	let username: string = $state('');
 	let gender: string = $state('');
@@ -19,21 +26,42 @@
 
 	const register = async () => {
 		try {
-			await createUserWithEmailAndPassword(fb_auth, email, password);
+			// Query any users with the users username choice.
+			const usersWithSelectedUsername = await getDocs(
+				query(collection(fb_db, 'users'), where('username', '==', username))
+			);
+			// Error is thats the case.
+			if (usersWithSelectedUsername.docs.length >= 1) {
+				throw new UserNameInUseError('Username is already in use.');
+			}
 
-			await addDoc(collection(fb_db, 'users'), {
+			// Create user.
+			let userCredential = await createUserWithEmailAndPassword(fb_auth, email, password);
+
+			// Sets public data in a readable path
+			await setDoc(doc(fb_db, 'users', userCredential.user.uid), {
 				username: username,
-				gender: gender,
 				registered: new Date().toISOString()
 			});
 
+			// Set private data in a non-readable path.
+			await setDoc(doc(fb_db, 'usersPrivate', userCredential.user.uid), {
+				name: name,
+				gender: gender
+			});
+
+			// Dumb check thats necissary.
+			if (!userCredential.user.email) throw new Error('Email is null');
+
 			console.log('User registered successfully');
 
-			goto('/login');
-		} catch (error: any) {
-			errorCode = error.code;
-			errorMessage = error.message;
-			console.log(errorCode, errorMessage);
+			goto('/games');
+		} catch (error) {
+			if (error instanceof Error) {
+				console.error(`${error.name}: ${error.message}`);
+			} else {
+				console.error('An unknown error occurred:', error);
+			}
 
 			success = false;
 		}
@@ -55,6 +83,7 @@
 				register();
 			}}
 		>
+			<Input type="text" placeholder="Name" required bind:value={name} />
 			<Input type="text" placeholder="Username" required bind:value={username} />
 			<Input type="email" placeholder="Email" required bind:value={email} />
 			<Input type="password" placeholder="Password" required bind:value={password} />
@@ -68,13 +97,16 @@
 			Already have an account? <a href="/login" class="text-blue-500">Login</a>
 		</p>
 
+		<!-- Use AuthErrorCodes to see errors -->
 		{#if !success && success !== undefined}
-			{#if errorCode === AuthErrorCodes.EMAIL_EXISTS}
+			{#if errorCode === 'auth/email-already-in-use'}
 				<p class="text-red-500">This email is already registered.</p>
-			{:else if errorCode === AuthErrorCodes.INVALID_EMAIL}
+			{:else if errorCode === 'auth/invalid-email'}
 				<p class="text-red-500">The email address is not valid.</p>
-			{:else if errorCode === AuthErrorCodes.WEAK_PASSWORD}
+			{:else if errorCode === 'auth/weak-password'}
 				<p class="text-red-500">The password is too weak.</p>
+			{:else if errorMessage === 'Username is already in use.'}
+				<p class="text-red-500">Username is already in use.</p>
 			{:else}
 				<p class="text-red-500">An unknown error occurred. Please try again.</p>
 			{/if}
