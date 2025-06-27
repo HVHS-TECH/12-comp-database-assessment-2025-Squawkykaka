@@ -11,7 +11,7 @@
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"format": "prettier --write .",
-		"lint": "prettier --check . && eslint .",
+		"lint": "prettier --check --write . && eslint .",
 		"postinstall": "patchelf --set-interpreter \"$(cat $NIX_CC/nix-support/dynamic-linker)\" node_modules/.pnpm/@cloudflare+workerd-linux-64@1.20250617.0/node_modules/@cloudflare/workerd-linux-64/bin/workerd",
 		"deploy": "pnpm run build && wrangler deploy"
 	},
