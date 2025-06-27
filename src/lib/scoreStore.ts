@@ -1,5 +1,5 @@
-const { collection, getDocs, limit, orderBy, query } = await import('firebase/firestore');
-import { writable } from 'svelte/store';
+import { collection, getDocs, limit, orderBy, query } from 'firebase/firestore';
+import { get, writable } from 'svelte/store';
 import { fb_db } from './firebase';
 
 // Type for a single game, user id and score.
@@ -18,49 +18,58 @@ export interface GameScoresList {
 export const leaderBoardScores = writable<GameScoresList | undefined>(undefined);
 
 /**
- * function to fetch the scores of a specific game, then save it in a store
- * so that if we navigate to another and back, we dont fetch data twice
+ * Fetches the scores of a specific game and saves them in the store.
+ * If the scores are already fetched, it returns them directly.
  *
- * @remarks This function is a work in progress.
- * @param game_id The id for game, the same one as defined in Game
- * @returns
+ * @param game_id The id of the game.
+ * @returns The scores for the specified game.
  */
-export async function getGameScores(game_id: string) {
-	// Check if current game already has data fetched, if so return.
-	let currentGameScores: GameScoresList | undefined;
-	leaderBoardScores.subscribe((value) => {
-		currentGameScores = value;
-	});
+export async function getGameScores(game_id: string): Promise<GameScores> {
+	// Get the current state of the leaderboard scores store.
+	const currentGameScores = get(leaderBoardScores);
 
-	// If currentGameScores is undefined it means we need to fecth data.
-	if (currentGameScores == undefined) {
-		const gameScore = await fb_fetchGameScore(game_id);
-
-		console.log(gameScore);
-
-		currentGameScores = {
-			game_id: {}
-		};
-
-		return currentGameScores;
+	// If the scores for the game are already fetched, return them.
+	if (currentGameScores && currentGameScores[game_id]) {
+		return currentGameScores[game_id];
 	}
 
-	// If not, get scores data.
+	// Fetch the scores from Firebase.
+	const gameScore = await fb_fetchGameScore(game_id);
 
-	// Append score data to store.
+	// Update the store with the fetched scores.
+	leaderBoardScores.update((scores) => {
+		return {
+			...scores,
+			[game_id]: gameScore
+		};
+	});
 
-	// Return.
+	// Return the fetched scores.
+	return gameScore;
 }
 
-// This function fetches the scores from firebase without any checks, used in getGameScores for actually fetching data.
-async function fb_fetchGameScore(game_id: string) {
+/**
+ * Fetches the scores from Firebase without any checks.
+ *
+ * @param game_id The id of the game.
+ * @returns The top scores for the specified game.
+ */
+async function fb_fetchGameScore(game_id: string): Promise<GameScores> {
 	const scoreQuery = query(
-		collection(fb_db, `games/${game_id}/scores`), // Path to the scores subcollection
+		collection(fb_db, `games/${game_id}/scores`), // Correct path to the scores subcollection
 		orderBy('score', 'desc'), // Order by score in descending order
 		limit(10) // Limit to top 10 scores
 	);
 
-	const topScores = getDocs(scoreQuery);
+	const topScores = await getDocs(scoreQuery);
 
-	return (await topScores).docs;
+	// Convert Firestore data into a usable format.
+	const gameScores: GameScores = {};
+	topScores.forEach((doc) => {
+		gameScores[doc.id] = {
+			score: doc.data().score
+		};
+	});
+
+	return gameScores;
 }

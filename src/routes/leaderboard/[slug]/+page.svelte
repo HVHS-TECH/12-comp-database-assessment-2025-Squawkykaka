@@ -1,5 +1,11 @@
 <script lang="ts">
+	import { getGameScores } from '$lib/scoreStore.js';
+
 	let { data } = $props();
+
+	getGameScores(data.id).then((data) => {
+		console.log(data);
+	});
 
 	// console.log(data.current_game.id);
 	// // getGameScores(data.current_game.id);

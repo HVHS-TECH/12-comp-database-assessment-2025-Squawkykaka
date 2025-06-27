@@ -19,6 +19,7 @@ If the game is clicked go to a page for that game which is fullscreen
 					src={image}
 					alt={title}
 					fetchpriority="high"
+					loading="lazy"
 					class="h-80 w-full rounded-t-lg object-cover"
 				/>
 				<p class="p-2 text-sm text-gray-700">{description}</p>
