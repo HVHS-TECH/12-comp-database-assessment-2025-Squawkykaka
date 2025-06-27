@@ -1,0 +1,24 @@
+[
+    {
+        "title": "A game of rick",
+        "description": "And roll...",
+        "image": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.EYj0hyAs8FpkhTE1-dAewgHaEK%26pid%3DApi&f=1&ipt=cde3f4c2a188bb1cd46fa77ce86ff071aa94a0f7f61d70d9a7423e64a96e0204&ipo=images",
+        "scoreDisplay": {
+            "displayName": "Times Rickrolled"
+        },
+        "slug": "rickroll",
+        "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+        "id": "IzKkLanj1OUhbXSar4Iq"
+    },
+    {
+        "title": "Bear Attack",
+        "description": "A game where you must dodge bears and collect berries to score points.",
+        "image": "/images/bear.webp",
+        "scoreDisplay": {
+            "displayName": "Time Survived"
+        },
+        "slug": "bear-attack",
+        "url": "https://hvhs-tech.github.io/12comp-javascript-project-2025-Squawkykaka/",
+        "id": "KDoU0tTTZScihGDOtVc1"
+    }
+]

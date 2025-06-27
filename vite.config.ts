@@ -12,5 +12,8 @@ export default defineConfig({
 				// cssnanoPlugin({ preset })
 			]
 		}
+	},
+	build: {
+		target: 'esnext'
 	}
 });

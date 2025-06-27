@@ -1,4 +1,4 @@
-import { collection, getDocs, limit, orderBy, query } from 'firebase/firestore';
+const { collection, getDocs, limit, orderBy, query } = await import('firebase/firestore');
 import { writable } from 'svelte/store';
 import { fb_db } from './firebase';
 

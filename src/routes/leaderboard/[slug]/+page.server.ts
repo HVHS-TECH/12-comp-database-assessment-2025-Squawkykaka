@@ -1,19 +1,15 @@
-import { collectGames, type Game } from '$lib/gameStore';
+import { gameList } from '$lib/gameStore';
 import { error } from '@sveltejs/kit';
+import { get } from 'svelte/store';
 
 export async function load({ params }) {
-	async function getCurrentGame() {
-		const game_list = await collectGames();
+	const game_list = get(gameList);
 
-		const current_game: Game | null =
-			Object.values(game_list).find((game) => game.slug === params.slug) || null;
+	const current_game = game_list.find((game) => game.slug === params.slug) || null;
 
-		return current_game;
+	if (!current_game) {
+		error(404, 'That game does not exist.');
 	}
 
-	const current_game = getCurrentGame();
-
-	return {
-		current_game
-	};
+	return current_game;
 }
