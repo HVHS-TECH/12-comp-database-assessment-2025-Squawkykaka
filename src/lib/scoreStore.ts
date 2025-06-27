@@ -1,10 +1,11 @@
-import { collection, getDocs, limit, orderBy, query } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, limit, orderBy, query } from 'firebase/firestore';
 import { get, writable } from 'svelte/store';
 import { fb_db } from './firebase';
 
 // Type for a single game, user id and score.
 export interface GameScores {
-	[id: string]: {
+	[user_id: string]: {
+		username: string;
 		score: number;
 	};
 }
@@ -34,7 +35,7 @@ export async function getGameScores(game_id: string): Promise<GameScores> {
 	}
 
 	// Fetch the scores from Firebase.
-	const gameScore = await fb_fetchGameScore(game_id);
+	const gameScore = await fb_fetchGameScores(game_id);
 
 	// Update the store with the fetched scores.
 	leaderBoardScores.update((scores) => {
@@ -54,20 +55,38 @@ export async function getGameScores(game_id: string): Promise<GameScores> {
  * @param game_id The id of the game.
  * @returns The top scores for the specified game.
  */
-async function fb_fetchGameScore(game_id: string): Promise<GameScores> {
+async function fb_fetchGameScores(game_id: string): Promise<GameScores> {
 	const scoreQuery = query(
 		collection(fb_db, `games/${game_id}/scores`), // Correct path to the scores subcollection
 		orderBy('score', 'desc'), // Order by score in descending order
 		limit(10) // Limit to top 10 scores
 	);
 
+	// Get top scores.
 	const topScores = await getDocs(scoreQuery);
 
-	// Convert Firestore data into a usable format.
+	// Convert Firestore data into a usable format with usernames.
+	const scorePromises = topScores.docs.map(async (scoreDoc) => {
+		// Get username for current user
+		const userDoc = await getDoc(doc(fb_db, 'users', scoreDoc.id));
+		const username = userDoc.exists() ? userDoc.data().username : 'Unknown User';
+
+		return {
+			userId: scoreDoc.id,
+			username: username,
+			score: scoreDoc.data().score
+		};
+	});
+
+	// Wait for all user data to be fetched
+	const scoresWithUsernames = await Promise.all(scorePromises);
+
+	// Build the final GameScores object
 	const gameScores: GameScores = {};
-	topScores.forEach((doc) => {
-		gameScores[doc.id] = {
-			score: doc.data().score
+	scoresWithUsernames.forEach(({ userId, username, score }) => {
+		gameScores[userId] = {
+			username: username,
+			score: score
 		};
 	});
 

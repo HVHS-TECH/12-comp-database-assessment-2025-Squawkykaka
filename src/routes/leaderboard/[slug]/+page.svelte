@@ -1,22 +1,11 @@
 <script lang="ts">
 	import { getGameScores } from '$lib/scoreStore.js';
-
 	let { data } = $props();
 
-	getGameScores(data.id).then((data) => {
-		console.log(data);
-	});
-
-	// console.log(data.current_game.id);
-	// // getGameScores(data.current_game.id);
-
-	// // const topScoresPromise = getDocs(scoreQuery);
-
-	// const score_display = data.current_game.scoreDisplay;
+	const scores = $derived(getGameScores(data.id));
 </script>
 
 <h2>{data.title}</h2>
-
 <table>
 	<thead>
 		<tr>
@@ -25,9 +14,19 @@
 		</tr>
 	</thead>
 	<tbody>
-		<tr>
-			<th scope="row">Bobthebuilder</th>
-			<td>22</td>
-		</tr>
+		{#await scores}
+			<tr>
+				<th>Loading scores...</th>
+			</tr>
+		{:then current_game_scores}
+			{#if current_game_scores !== undefined}
+				{#each Object.entries(current_game_scores) as [userId, scoreData]}
+					<tr>
+						<th scope="row">{scoreData.username}</th>
+						<td>{scoreData.score}</td>
+					</tr>
+				{/each}
+			{/if}
+		{/await}
 	</tbody>
 </table>
